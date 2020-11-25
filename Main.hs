@@ -20,6 +20,7 @@ evaluate :: Sense a -> a
 evaluate = unSense
 
 instance Knowledge Sense where
+
     answer string = 
         Sense (
             Answer 
@@ -28,6 +29,7 @@ instance Knowledge Sense where
                 string 
                 (QuestionsToAnswer [])
         )
+
     question string = 
         Sense (
             Question 
@@ -36,6 +38,7 @@ instance Knowledge Sense where
                 string 
                 (AnswersToQuestion [])
         )
+        
     ask
         Sense {unSense = (QuestionedAnswer Nothing)}
         senseQuestion
