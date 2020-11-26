@@ -1,26 +1,6 @@
-module MergingInterpreter where
+module Interpreter.Merging.Factory where
 
-import Discussion
-
-newtype MergingInterpreter a = MergingInterpreter a
-
-evaluate :: MergingInterpreter a -> a
-evaluate (MergingInterpreter a) = a
-
-instance Discussion MergingInterpreter where
-
-    silentAnswer = MergingInterpreter (createSilentAnswer)
-    silentQuestion = MergingInterpreter (createSilentQuestion)
-        
-    answer "" = MergingInterpreter (complainAboutNoTextInAnswer)
-    answer string = MergingInterpreter (createAnswer string)
-
-    question "" = MergingInterpreter (complainAboutNoTextInQuestion)
-    question string = MergingInterpreter (createQuestion string)
-
-    ask (MergingInterpreter answer) (MergingInterpreter question) = MergingInterpreter (askQuestion answer question)
-    reply (MergingInterpreter question) (MergingInterpreter answer) = MergingInterpreter (replyWithAnswer question answer)
-
+import Language
 
 createSilentAnswer :: Answer
 createSilentAnswer = 
@@ -89,12 +69,3 @@ createQuestion string =
                 )
             )
         )
-
-askQuestion :: Answer -> Question -> Question
-askQuestion a q = q
-
-replyWithAnswer :: Question -> Answer -> Answer
-replyWithAnswer q a = a
-
--- mergeQuestion :: Answer -> Question -> Question
--- mergeQuestion a q = q
