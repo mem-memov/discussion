@@ -1,26 +1,26 @@
-module Interpreter.Merging.Interpreter where
+module Interpreter.Merging where
 
 import Language
 import qualified Interpreter.Merging.Factory as Factory
 
-newtype MergingInterpreter a = MergingInterpreter a
+newtype Interpreter a = Interpreter a
 
-evaluate :: MergingInterpreter a -> a
-evaluate (MergingInterpreter a) = a
+evaluate :: Interpreter a -> a
+evaluate (Interpreter a) = a
 
-instance Discussion MergingInterpreter where
+instance Language Interpreter where
 
-    silentAnswer = MergingInterpreter (Factory.createSilentAnswer)
-    silentQuestion = MergingInterpreter (Factory.createSilentQuestion)
+    silentAnswer = Interpreter (Factory.createSilentAnswer)
+    silentQuestion = Interpreter (Factory.createSilentQuestion)
         
-    answer "" = MergingInterpreter (Factory.complainAboutNoTextInAnswer)
-    answer string = MergingInterpreter (Factory.createAnswer string)
+    answer "" = Interpreter (Factory.complainAboutNoTextInAnswer)
+    answer string = Interpreter (Factory.createAnswer string)
 
-    question "" = MergingInterpreter (Factory.complainAboutNoTextInQuestion)
-    question string = MergingInterpreter (Factory.createQuestion string)
+    question "" = Interpreter (Factory.complainAboutNoTextInQuestion)
+    question string = Interpreter (Factory.createQuestion string)
 
-    ask (MergingInterpreter answer) (MergingInterpreter question) = MergingInterpreter (askQuestion answer question)
-    reply (MergingInterpreter question) (MergingInterpreter answer) = MergingInterpreter (replyWithAnswer question answer)
+    ask (Interpreter answer) (Interpreter question) = Interpreter (askQuestion answer question)
+    reply (Interpreter question) (Interpreter answer) = Interpreter (replyWithAnswer question answer)
 
 askQuestion :: Answer -> Question -> Question
 askQuestion a q = q

@@ -16,7 +16,7 @@ newtype AnsweredQuestion = AnsweredQuestion (Maybe Question) deriving (Show)
 newtype PreviousAnswer = PreviousAnswer (Maybe Answer) deriving (Show)
 newtype AnswersToQuestion = AnswersToQuestion [Answer] deriving (Show)
 
-class Discussion interpreter where
+class Language interpreter where
     silentAnswer :: interpreter Answer
     silentQuestion :: interpreter Question
     answer :: String -> interpreter Answer
