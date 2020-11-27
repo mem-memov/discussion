@@ -11,14 +11,14 @@ replyWith
         questionString 
         (AnswersToQuestion answersToQuestion)
     )
-    answer'@(CorrectAnswer 
+    answer@(CorrectAnswer 
         (AnsweredQuestions answeredQuestions) 
         (PreviousAnswer previousAnswer) 
         answerString 
         (QuestionsToAnswer questionsToAnswer)
     )
     = CorrectAnswer
-        (AnsweredQuestions answeredQuestions)
+        (AnsweredQuestions (answeredQuestion : answeredQuestions))
         (PreviousAnswer 
             (case answersToQuestion of 
                 [] -> NoAnswer
