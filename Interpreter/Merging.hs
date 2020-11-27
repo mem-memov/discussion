@@ -12,11 +12,11 @@ interpret (Interpreter a) = a
 instance Language Interpreter where
 
     noAnswer = Interpreter (NoAnswer)
-    
+
     noQuestion = Interpreter (NoQuestion)
         
-    answer "" = Interpreter (IncorrectAnswer "No answer text provided.")
-    answer string = Interpreter 
+    newAnswer "" = Interpreter (IncorrectAnswer "No answer text provided.")
+    newAnswer string = Interpreter 
         (CorrectAnswer 
             (AnsweredQuestion NoQuestion) 
             (PreviousAnswer NoAnswer) 
@@ -24,8 +24,8 @@ instance Language Interpreter where
             (QuestionsToAnswer [])
         )
 
-    question "" = Interpreter (IncorrectQuestion "No question text provided.")
-    question string = Interpreter 
+    newQuestion "" = Interpreter (IncorrectQuestion "No question text provided.")
+    newQuestion string = Interpreter 
         (CorrectQuestion 
             (QuestionedAnswer NoAnswer) 
             (PreviousQuestion NoQuestion) 

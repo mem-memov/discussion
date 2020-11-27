@@ -42,7 +42,7 @@ newtype QuestionsToAnswer =
 class Language interpreter where
     noAnswer :: interpreter Answer
     noQuestion :: interpreter Question
-    answer :: String -> interpreter Answer
-    question :: String -> interpreter Question
+    newAnswer :: String -> interpreter Answer
+    newQuestion :: String -> interpreter Question
     ask :: interpreter Answer -> interpreter Question -> interpreter Question
     reply :: interpreter Question -> interpreter Answer -> interpreter Answer
