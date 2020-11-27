@@ -3,7 +3,7 @@ module Language where
 data Question = 
     NoQuestion
     | CorrectQuestion 
-        QuestionedAnswer 
+        QuestionedAnswers 
         PreviousQuestion 
         String 
         AnswersToQuestion
@@ -12,8 +12,8 @@ data Question =
 newtype PreviousQuestion = 
     PreviousQuestion Question 
     deriving (Show)
-newtype QuestionedAnswer = 
-    QuestionedAnswer Answer 
+newtype QuestionedAnswers = 
+    QuestionedAnswers [Answer]
     deriving (Show)
 newtype AnswersToQuestion = 
     AnswersToQuestion [Answer] 
@@ -22,14 +22,14 @@ newtype AnswersToQuestion =
 data Answer = 
     NoAnswer
     | CorrectAnswer 
-        AnsweredQuestion 
+        AnsweredQuestions 
         PreviousAnswer 
         String 
         QuestionsToAnswer
     | IncorrectAnswer String
     deriving (Show)
-newtype AnsweredQuestion = 
-    AnsweredQuestion Question 
+newtype AnsweredQuestions = 
+    AnsweredQuestions [Question] 
     deriving (Show)
 newtype PreviousAnswer = 
     PreviousAnswer Answer 

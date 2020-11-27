@@ -6,19 +6,19 @@ replyWith :: Question -> Answer -> Answer
 replyWith NoQuestion correctAnswer@(CorrectAnswer _ _ _ _) = correctAnswer
 replyWith 
     answeredQuestion@(CorrectQuestion 
-        (QuestionedAnswer questionedAnswer) 
+        (QuestionedAnswers questionedAnswers) 
         (PreviousQuestion previousQuestion) 
         questionString 
         (AnswersToQuestion answersToQuestion)
     )
     answer'@(CorrectAnswer 
-        (AnsweredQuestion NoQuestion) 
+        (AnsweredQuestions answeredQuestions) 
         (PreviousAnswer previousAnswer) 
         answerString 
         (QuestionsToAnswer questionsToAnswer)
     )
     = CorrectAnswer
-        (AnsweredQuestion answeredQuestion)
+        (AnsweredQuestions answeredQuestions)
         (PreviousAnswer 
             (case answersToQuestion of 
                 [] -> NoAnswer
