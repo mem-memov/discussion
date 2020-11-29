@@ -10,31 +10,7 @@ interpret :: Interpreter a -> a
 interpret (Interpreter a) = a
 
 instance Language Interpreter where
-
-    noAnswer = Interpreter (NoAnswer)
-
-    noQuestion = Interpreter (NoQuestion)
-        
-    newAnswer "" = Interpreter (IncorrectAnswer "No answer text provided.")
-    newAnswer string = Interpreter 
-        (CorrectAnswer 
-            (AnsweredQuestion NoQuestion) 
-            (PreviousAnswer NoAnswer) 
-            string 
-            (QuestionsToAnswer [])
-        )
-
-    newQuestion "" = Interpreter (IncorrectQuestion "No question text provided.")
-    newQuestion string = Interpreter 
-        (CorrectQuestion 
-            (QuestionedAnswer NoAnswer) 
-            (PreviousQuestion NoQuestion) 
-            string 
-            (AnswersToQuestion [])
-        )
-
-    ask (Interpreter answer) (Interpreter question) = Interpreter 
-        (MergingQuestion.ask answer question)
-    
-    reply (Interpreter question) (Interpreter answer) = Interpreter 
-        (MergingAnswer.replyWith question answer)
+    answer content = Interpreter (Answer (Nothing, content, []))
+    question content = Interpreter (Question (Nothing, content, []))
+    ask (Interpreter answer) (Interpreter question) = Interpreter (MergingQuestion.ask answer question)
+    reply (Interpreter question) (Interpreter answer) = Interpreter (MergingAnswer.replyWith question answer)
