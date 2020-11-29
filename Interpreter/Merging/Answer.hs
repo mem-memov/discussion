@@ -5,20 +5,20 @@ import Language
 replyWith :: Question -> Answer -> Answer
 replyWith NoQuestion correctAnswer@(CorrectAnswer _ _ _ _) = correctAnswer
 replyWith 
-    answeredQuestion@(CorrectQuestion 
-        (QuestionedAnswers questionedAnswers) 
+    question@(CorrectQuestion 
+        (QuestionedAnswer questionedAnswer) 
         (PreviousQuestion previousQuestion) 
         questionString 
         (AnswersToQuestion answersToQuestion)
     )
     answer@(CorrectAnswer 
-        (AnsweredQuestions answeredQuestions) 
+        (AnsweredQuestion answeredQuestion) 
         (PreviousAnswer previousAnswer) 
         answerString 
         (QuestionsToAnswer questionsToAnswer)
     )
     = CorrectAnswer
-        (AnsweredQuestions (answeredQuestion : answeredQuestions))
+        (AnsweredQuestion answeredQuestion)
         (PreviousAnswer 
             (case answersToQuestion of 
                 [] -> NoAnswer

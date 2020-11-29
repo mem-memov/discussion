@@ -18,7 +18,7 @@ instance Language Interpreter where
     newAnswer "" = Interpreter (IncorrectAnswer "No answer text provided.")
     newAnswer string = Interpreter 
         (CorrectAnswer 
-            (AnsweredQuestions []) 
+            (AnsweredQuestion NoQuestion) 
             (PreviousAnswer NoAnswer) 
             string 
             (QuestionsToAnswer [])
@@ -27,7 +27,7 @@ instance Language Interpreter where
     newQuestion "" = Interpreter (IncorrectQuestion "No question text provided.")
     newQuestion string = Interpreter 
         (CorrectQuestion 
-            (QuestionedAnswers []) 
+            (QuestionedAnswer NoAnswer) 
             (PreviousQuestion NoQuestion) 
             string 
             (AnswersToQuestion [])

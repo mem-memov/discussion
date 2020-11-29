@@ -5,20 +5,20 @@ import Language
 ask :: Answer -> Question -> Question
 ask NoAnswer correctQuestion@(CorrectQuestion _ _ _ _) = correctQuestion
 ask
-    questionedAnswer@(CorrectAnswer 
-        (AnsweredQuestions answeredQuestions) 
+    answer@(CorrectAnswer 
+        (AnsweredQuestion answeredQuestion) 
         (PreviousAnswer previousAnswer) 
         answerString 
         (QuestionsToAnswer questionsToAnswer)
     )
     question@(CorrectQuestion 
-        (QuestionedAnswers questionedAnswers) 
+        (QuestionedAnswer questionedAnswer) 
         (PreviousQuestion previousQuestion) 
         questionString 
         (AnswersToQuestion answersToQuestion)
     )
     = CorrectQuestion
-        (QuestionedAnswers (questionedAnswer : questionedAnswers)) 
+        (QuestionedAnswer questionedAnswer) 
         (PreviousQuestion
             (case questionsToAnswer of 
                 [] -> NoQuestion
