@@ -4,6 +4,7 @@ import Language
 
 replyWith :: Question -> Answer -> Answer
 replyWith 
-    (Question (Nothing, content, []))
-    answer@(_)
-    = answer
+    question@(Question (questiondAnswer, questionString, answersToQuestion))
+    (Answer (Nothing, answerString, questionsToAnswer))
+    =
+    Answer (Just question, answerString, questionsToAnswer)

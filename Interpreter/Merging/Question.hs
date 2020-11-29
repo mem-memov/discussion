@@ -4,8 +4,8 @@ import Language
 
 ask :: Answer -> Question -> Question
 ask
-    (Answer (Nothing, content, []))
-    question@(_)
-    = question
+    answer@(_)
+    (Question (Nothing, questionString, answersToQuestion))
+    = Question (Just answer, questionString, answersToQuestion)
 
 
