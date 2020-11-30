@@ -1,8 +1,8 @@
 module Language where
 
-data Reply = Question Discussion String [Discussion] | Answer Discussion String [Discussion]
+data Reply = Question (Maybe Reply) String [Reply] | Answer (Maybe Reply) String [Reply]
 
 class Language interpreter where
-    answer :: String -> interpreter Discussion
-    question :: String -> interpreter Discussion
+    answer :: String -> interpreter Reply
+    question :: String -> interpreter Reply
     reply :: interpreter Reply -> interpreter Reply -> interpreter Reply
