@@ -1,10 +1,8 @@
 module Language where
 
-data Question = Question (Maybe Answer, String, [Answer]) deriving Show
-data Answer = Answer (Maybe Question, String, [Question]) deriving Show
+data Reply = Question Discussion String [Discussion] | Answer Discussion String [Discussion]
 
 class Language interpreter where
-    answer :: String -> interpreter Answer
-    question :: String -> interpreter Question
-    ask :: interpreter Answer -> interpreter Question -> interpreter Question
-    reply :: interpreter Question -> interpreter Answer -> interpreter Answer
+    answer :: String -> interpreter Discussion
+    question :: String -> interpreter Discussion
+    reply :: interpreter Reply -> interpreter Reply -> interpreter Reply
