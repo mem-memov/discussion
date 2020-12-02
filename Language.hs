@@ -1,8 +1,10 @@
 module Language where
 
-data Reply = Question (Maybe Reply) String [Reply] | Answer (Maybe Reply) String [Reply]
+newtype Question a = Question a
+newtype Answer a = Answer a
 
 class Language interpreter where
-    answer :: String -> interpreter Reply
-    question :: String -> interpreter Reply
-    reply :: interpreter Reply -> interpreter Reply -> interpreter Reply
+    answer :: a -> interpreter (Answer a)
+    question :: a -> interpreter (Question a)
+    ask :: interpreter (Answer a) -> interpreter (Question a) -> interpreter (Question a)
+    reply :: interpreter (Question a) -> interpreter (Answer a) -> interpreter (Answer a)
