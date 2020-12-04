@@ -1,10 +1,31 @@
 module Language where
 
-newtype Question a = Question a
-newtype Answer a = Answer a
+data Reply = ReplyAnswer Answer | ReplyQuestion Question
+
+data Question = 
+    Question
+        QuestionedAnswer
+        QuestionWords
+        AnswerToQuestion
+
+newtype QuestionedAnswer = QuestionedAnswer (Maybe Answer)
+newtype QuestionWords = QuestionWords String
+newtype AnswerToQuestion = AnswerToQuestion (Maybe Answer)
+
+data Answer = 
+    Answer 
+        AnsweredQuestion 
+        AnswerWords 
+        AnswerReferences
+        QuestionsToAnswer
+
+newtype AnsweredQuestion = AnsweredQuestion (Maybe Question)
+newtype AnswerWords = AnswerWords String
+newtype AnswerReferences = AnswerReferences ([Reply])
+newtype QuestionsToAnswer = QuestionsToAnswer ([Question])
 
 class Language interpreter where
-    answer :: a -> interpreter (Answer a)
-    question :: a -> interpreter (Question a)
-    ask :: interpreter (Answer a) -> interpreter (Question a) -> interpreter (Question a)
-    reply :: interpreter (Question a) -> interpreter (Answer a) -> interpreter (Answer a)
+    question :: String -> interpreter Question
+    answer :: String -> interpreter Answer
+    ask :: interpreter Answer -> interpreter Question -> interpreter Question
+    reply :: interpreter Question -> interpreter Answer -> interpreter Answer

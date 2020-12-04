@@ -10,7 +10,38 @@ interpret :: Interpreter a -> a
 interpret (Interpreter a) = a
 
 instance Language Interpreter where
-    answer content = Interpreter (Answer content)
-    question content = Interpreter (Question content)
-    ask (Interpreter answer) (Interpreter question) = Interpreter question
+    question 
+        words 
+        = Interpreter
+            (Question
+                (QuestionedAnswer Nothing)
+                (QuestionWords words)
+                (AnswerToQuestion Nothing)
+            )
+    answer 
+        words 
+        = Interpreter 
+            (Answer 
+                (AnsweredQuestion Nothing)
+                (AnswerWords words)
+                (AnswerReferences [])
+                (QuestionsToAnswer [])
+            )
+    ask 
+        (Interpreter
+            answe@(Answer 
+                (AnsweredQuestion answeredQuestion)
+                (AnswerWords answerWords)
+                (AnswerReferences answerReferences)
+                (QuestionsToAnswer questionsToAnswer)
+            )
+        ) 
+        (Interpreter 
+            question@(Question
+                (QuestionedAnswer questionedAnswer)
+                (QuestionWords questionWords)
+                (AnswerToQuestion answerToQuestion)
+            )
+        ) 
+        = Interpreter question
     reply (Interpreter question) (Interpreter answer) = Interpreter answer
