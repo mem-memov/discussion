@@ -1,35 +1,113 @@
 module Discussion where
 
-class Questioning questioningInterpreter where
-class Answering answeringInterpreter where
+data Problem = 
+    NoProblem
+    | Problem
+        IncompleteSolution
+        QuestionWords
+        ResolvingSolution
+newtype QuestionWords = QuestionWords String
+newtype IncompleteSolution = IncompleteSolution Solution
+newtype ResolvingSolution = ResolvingSolution Solution
 
-data Question = NoQuestion | Question Words
-instance Questioning Question where
+data Question = Question QuestionWords
 
-data Answer = Answer Words
-instance Answering Answer where
+data Solution = 
+    NoSolution
+    | Solution 
+        SolvedProblem
+        AnswerWords
+        SolutionReferences
+        ProblemsOfSolution
+newtype AnswerWords = AnswerWords String
+newtype SolvedProblem = SolvedProblem Problem
+newtype SolutionReferences = SolutionReferences [Reference]
+newtype ProblemsOfSolution = ProblemsOfSolution [Problem]
 
-data Words = NoWords | Words String
+data Answer = 
+    Answer 
+        AnswerWords 
+        AnswerPaths
+newtype AnswerPaths = AnswerPaths [AnswerPath]
+newtype AnswerPath = AnswerPath [String]
 
-class Discussing discussingInterpreter where
-    ask :: 
-        (Answering answeringInterpreter
-        , Questioning questioningInterpreter)
-        => discussingInterpreter answeringInterpreter
-        -> discussingInterpreter questioningInterpreter
-        -> discussingInterpreter questioningInterpreter
-    reply :: 
-        (Answering answeringInterpreter
-        , Questioning questioningInterpreter)
-        => discussingInterpreter questioningInterpreter
-        -> discussingInterpreter answeringInterpreter
-        -> discussingInterpreter answeringInterpreter
+data Reference = ReferencedSolution Solution | ReferencedProblem Problem
 
-newtype Discussion a = Discussion a
+createQuestion :: String -> Question
+createQuestion
+    words
+    = Question
+        (QuestionWords words)
 
-instance Discussing Discussion where
-    ask a q = q
-    reply q a = a
+createProblem :: String -> Problem
+createProblem 
+    words 
+    = Problem
+        (IncompleteSolution NoSolution)
+        (QuestionWords words)
+        (ResolvingSolution NoSolution)
 
-createQuestion words = Discussion (Question (Words words))
-createAnswer words = Discussion (Answer (Words words))
+createAnswer :: String -> [[String]] -> Answer
+createAnswer
+    words
+    paths
+    = Answer
+        (AnswerWords words)
+        (AnswerPaths (map AnswerPath paths))
+
+createSolution :: String -> Solution
+createSolution
+    words
+    = Solution
+        (SolvedProblem NoProblem)
+        (AnswerWords words)
+        (SolutionReferences [])
+        (ProblemsOfSolution [])
+
+askQuestion :: Solution -> Question -> Problem
+askQuestion
+    (Solution 
+        solvedProblem
+        answerWords
+        solutionReferences
+        (ProblemsOfSolution problemsOfSolution)
+    )
+    (Question questionWords)
+    = let
+        incompleteSolution
+            = Solution 
+                solvedProblem
+                answerWords
+                solutionReferences
+                (ProblemsOfSolution (problemOfSolution : problemsOfSolution))
+        problemOfSolution 
+            = Problem 
+                (IncompleteSolution incompleteSolution)
+                questionWords
+                (ResolvingSolution NoSolution)
+    in problemOfSolution
+
+replyWithAnswer :: Problem -> Answer -> Solution
+replyWithAnswer
+    (Problem
+        incompleteSolution
+        questionWords
+        (ResolvingSolution NoSolution)
+    )
+    (Answer
+        answerWords 
+        answerPaths
+    )
+    = let
+        solvedProblem 
+            = Problem
+                incompleteSolution
+                questionWords
+                (ResolvingSolution resolvingSolution)
+        resolvingSolution 
+            = Solution
+                (SolvedProblem solvedProblem)
+                answerWords
+                (SolutionReferences [])
+                (ProblemsOfSolution [])
+    in resolvingSolution
