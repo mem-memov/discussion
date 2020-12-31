@@ -31,7 +31,7 @@ data Answer =
 newtype AnswerPaths = AnswerPaths [AnswerPath]
 newtype AnswerPath = AnswerPath [String]
 
-data Reference = ReferencedSolution Solution | ReferencedProblem Problem
+data Reference = NoReference | ReferencedSolution Solution | ReferencedProblem Problem
 
 createQuestion :: String -> Question
 createQuestion
@@ -111,3 +111,49 @@ replyWithAnswer
                 (SolutionReferences [])
                 (ProblemsOfSolution [])
     in resolvingSolution
+
+findReferenceInProblem :: [String] -> Problem -> Reference
+findReferenceInProblem
+    (step : [])
+    problem@(Problem
+        _
+        (QuestionWords words)
+        _
+    )
+    = if step == words
+        then ReferencedProblem problem
+        else NoReference
+findReferenceInProblem
+    (step : steps)
+    (Problem
+        (IncompleteSolution incompleteSolution)
+        (QuestionWords words)
+        _
+    )
+    = if step == words
+        then findReferenceInSolution steps incompleteSolution
+        else NoReference
+
+findReferenceInSolution :: [String] -> Solution -> Reference
+findReferenceInSolution
+    (step : [])
+    solution@(Solution
+        _
+        (AnswerWords words)
+        _
+        _
+    )
+    = if step == words
+        then ReferencedSolution solution
+        else NoReference
+findReferenceInSolution
+    (step : steps)
+    (Solution
+        (SolvedProblem solvedProblem)
+        (AnswerWords words)
+        _
+        _
+    )
+    = if step == words
+        then findReferenceInProblem steps solvedProblem
+        else NoReference
